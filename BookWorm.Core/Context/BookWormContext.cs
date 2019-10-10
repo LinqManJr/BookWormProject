@@ -1,14 +1,15 @@
 ﻿using BookWorm.Core.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm.Core.Context
 {
-    public class BookWormContext : DbContext
+    public class BookWormContext : IdentityDbContext
     {
-        //public BookWormContext(DbContextOptions<BookWormContext> options) : base(options) { }
+        //TODO: вынести строку соединения в сборку при старте
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=BookWormDb;Username=postgres;Password=postgres");
-        public DbSet<User> Users { get; set; }
+        
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<ReadTable> Readings { get; set; }

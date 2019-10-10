@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using BookWorm.Core;
 using BookWorm.Core.Context;
+using Microsoft.AspNetCore.Identity;
+using BookWorm.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm
 {
@@ -29,6 +24,12 @@ namespace BookWorm
         {
             services.AddControllers();
             services.AddDbContext<BookWormContext>();
+
+            services.AddIdentity<IdentityUser,IdentityRole>()
+                .AddEntityFrameworkStores<BookWormContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +50,9 @@ namespace BookWorm
             {
                 endpoints.MapControllers();
             });
+
+            using (var context = app.ApplicationServices.CreateScope().ServiceProvider.GetService<BookWormContext>())
+                context.Database.Migrate();
         }
     }
 }
