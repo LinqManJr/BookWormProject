@@ -7,6 +7,11 @@ using BookWorm.Core.Context;
 using Microsoft.AspNetCore.Identity;
 using BookWorm.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace BookWorm
 {
@@ -29,6 +34,24 @@ namespace BookWorm
                 .AddEntityFrameworkStores<BookWormContext>()
                 .AddDefaultTokenProviders();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg => {
+                cfg.RequireHttpsMetadata = true;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["JwtIssuer"],
+                    ValidAudience = Configuration["JwtIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddMvc();
         }
 
@@ -43,8 +66,8 @@ namespace BookWorm
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
-            app.UseAuthorization();
+                        
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
