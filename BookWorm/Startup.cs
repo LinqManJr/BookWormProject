@@ -30,7 +30,7 @@ namespace BookWorm
             services.AddControllers();
             services.AddDbContext<BookWormContext>();
 
-            services.AddIdentity<IdentityUser,IdentityRole>()
+            services.AddIdentity<BookUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookWormContext>()
                 .AddDefaultTokenProviders();
 
@@ -43,7 +43,7 @@ namespace BookWorm
             }).AddJwtBearer(cfg => {
                 cfg.RequireHttpsMetadata = true;
                 cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                cfg.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = Configuration["JwtIssuer"],
                     ValidAudience = Configuration["JwtIssuer"],
@@ -75,7 +75,9 @@ namespace BookWorm
             });
 
             using (var context = app.ApplicationServices.CreateScope().ServiceProvider.GetService<BookWormContext>())
+            {
                 context.Database.Migrate();
+            }                
         }
     }
 }

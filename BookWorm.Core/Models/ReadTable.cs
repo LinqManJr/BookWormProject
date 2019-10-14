@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookWorm.Core.Models
 {
@@ -8,7 +6,7 @@ namespace BookWorm.Core.Models
     {
         public int Id { get; set; }
         public Book Book { get; set; }
-        public User User { get; set; }
+        public BookUser User { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Resume { get; set; }
