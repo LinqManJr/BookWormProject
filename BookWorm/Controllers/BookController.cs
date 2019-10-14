@@ -25,7 +25,7 @@ namespace BookWorm.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<IActionResult> AddBookByUser([FromBody]ReadTableDto readTableDto)
+        public async Task<IActionResult> AddBookByUser(ReadTableDto readTableDto)
         {
             var user = await _userManager.FindByIdAsync(readTableDto.UserId.ToString());
             var author = readTableDto.Book.Author;
