@@ -121,31 +121,6 @@ namespace BookWorm.Core.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("BookWorm.Core.Models.Quote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("AuthorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("BookId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("QuoteText")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Quotes");
-                });
-
             modelBuilder.Entity("BookWorm.Core.Models.ReadTable", b =>
                 {
                     b.Property<int>("Id")
@@ -162,12 +137,6 @@ namespace BookWorm.Core.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("QuoteExist")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("QuoteId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
@@ -183,8 +152,6 @@ namespace BookWorm.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("QuoteId");
 
                     b.HasIndex("UserId");
 
@@ -328,26 +295,11 @@ namespace BookWorm.Core.Migrations
                         .HasForeignKey("AuthorId");
                 });
 
-            modelBuilder.Entity("BookWorm.Core.Models.Quote", b =>
-                {
-                    b.HasOne("BookWorm.Core.Models.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("BookWorm.Core.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId");
-                });
-
             modelBuilder.Entity("BookWorm.Core.Models.ReadTable", b =>
                 {
                     b.HasOne("BookWorm.Core.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId");
-
-                    b.HasOne("BookWorm.Core.Models.Quote", "Quote")
-                        .WithMany()
-                        .HasForeignKey("QuoteId");
 
                     b.HasOne("BookWorm.Core.Models.BookUser", "User")
                         .WithMany()

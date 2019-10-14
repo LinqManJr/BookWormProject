@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BookWorm.Core.Migrations
 {
-    public partial class First : Migration
+    public partial class FirstAttempt : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -188,33 +188,6 @@ namespace BookWorm.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Quotes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    QuoteText = table.Column<string>(nullable: true),
-                    AuthorId = table.Column<int>(nullable: true),
-                    BookId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Quotes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Quotes_Authors_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Quotes_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Readings",
                 columns: table => new
                 {
@@ -226,8 +199,6 @@ namespace BookWorm.Core.Migrations
                     EndDate = table.Column<DateTime>(nullable: true),
                     Resume = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false),
-                    QuoteId = table.Column<int>(nullable: true),
-                    QuoteExist = table.Column<bool>(nullable: false),
                     BookStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -237,12 +208,6 @@ namespace BookWorm.Core.Migrations
                         name: "FK_Readings_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Readings_Quotes_QuoteId",
-                        column: x => x.QuoteId,
-                        principalTable: "Quotes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -296,24 +261,9 @@ namespace BookWorm.Core.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Quotes_AuthorId",
-                table: "Quotes",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Quotes_BookId",
-                table: "Quotes",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Readings_BookId",
                 table: "Readings",
                 column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Readings_QuoteId",
-                table: "Readings",
-                column: "QuoteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Readings_UserId",
@@ -345,13 +295,10 @@ namespace BookWorm.Core.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Quotes");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Authors");
