@@ -13,7 +13,7 @@ namespace BookWorm.Core.Context
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<ReadTable> Readings { get; set; }
-        //public DbSet<Quote> Quotes { get; set; }
+        
     }
 
     

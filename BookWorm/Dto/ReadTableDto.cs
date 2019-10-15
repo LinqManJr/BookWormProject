@@ -1,6 +1,7 @@
 ﻿using BookWorm.Core;
+using BookWorm.Core.Models;
 using System;
-using static BookWorm.Core.Models.ReadTable;
+
 
 namespace BookWorm.Dto
 {

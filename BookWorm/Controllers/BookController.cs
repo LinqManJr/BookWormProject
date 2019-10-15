@@ -9,6 +9,7 @@ using BookWorm.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm.Controllers
 {
@@ -43,9 +44,20 @@ namespace BookWorm.Controllers
             };
             _context.Readings.Add(readTable);
             await _context.SaveChangesAsync();
-            return Ok(readTable.Book);
+            return Ok();
             //check exceptions
             //TODO: add mapping from tdo to entity
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<object>> GetBooks(string userId)
+        {            
+            var result = _context.Readings.Where(x => x.User.Id == userId).Join(_context.Books, r => r.Book.Id, b => b.Id, (r, b) => new
+            {
+                BookName = b.Name,
+                BookAuthor = string.Join(b.Author.Name, b.Author.Surname)
+            });
+            return await Task.FromResult(result);            
         }
     }
 }

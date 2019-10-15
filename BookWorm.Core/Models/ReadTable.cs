@@ -2,7 +2,7 @@
 
 namespace BookWorm.Core.Models
 {
-    public partial class ReadTable
+    public class ReadTable
     {
         public int Id { get; set; }
         public Book Book { get; set; }
@@ -12,6 +12,6 @@ namespace BookWorm.Core.Models
         public string Resume { get; set; }
         public int Rating { get; set; }        
         public Status BookStatus { get; set; }
-    }
-    
+    }    
+
 }
