@@ -46,6 +46,7 @@ namespace BookWorm.Controllers
             await _context.SaveChangesAsync();
             return Ok();
             //check exceptions
+            //check if book or author exist (out to service)
             //TODO: add mapping from tdo to entity
         }
 
@@ -54,10 +55,27 @@ namespace BookWorm.Controllers
         {            
             var result = _context.Readings.Where(x => x.User.Id == userId).Join(_context.Books, r => r.Book.Id, b => b.Id, (r, b) => new
             {
+                BookId = b.Id,
                 BookName = b.Name,
                 BookAuthor = string.Join(b.Author.Name, b.Author.Surname)
             });
             return await Task.FromResult(result);            
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserBook(string userId, int bookId)
+        {
+            var readingsId = await _context.Readings.FirstOrDefaultAsync(x => x.User.Id == userId && x.Book.Id == bookId);
+            if(readingsId != null)
+            {
+                _context.Readings.Remove(readingsId);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("Entity with this properties was not found");
+            }
+            return Ok($"Book {readingsId.Book.Name} was deleted");
         }
     }
 }
